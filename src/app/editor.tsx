@@ -1,74 +1,49 @@
 import { useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
-import {
-  StyleSheet,
-  useColorScheme,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, useColorScheme, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NotesListScreen } from "@/components/notes-list-screen";
-import { NOTES } from "@/constants/notes";
+
+import { NoteEditorScreen } from "@/components/note-editor-screen";
 import {
   createThemedStyles,
   darkPalette,
   lightPalette,
 } from "@/constants/theme";
 
-export default function Index() {
+export default function Editor() {
   const deviceScheme = useColorScheme();
   const { width } = useWindowDimensions();
   const [darkMode, setDarkMode] = useState<boolean | null>(null);
-  const [query, setQuery] = useState("");
+  const [title, setTitle] = useState("Meeting takeaways");
+  const [body, setBody] = useState(
+    "Start with the core flow, keep the interface quiet, and leave enough breathing room for longer notes. Review spacing on both phone and tablet sizes before submission."
+  );
 
   const isTablet = width >= 760;
-
   const resolvedDarkMode = darkMode ?? (deviceScheme === "dark");
-
   const palette = resolvedDarkMode ? darkPalette : lightPalette;
-  
   const themedStyles = useMemo(
     () => createThemedStyles(palette, width, isTablet),
     [palette, width, isTablet]
   );
 
-  const handleDarkModeChange = (value: boolean) => {
-    setDarkMode(value);
-  };
-
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(palette.background);
   }, [palette.background]);
 
-
-  const filteredNotes = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      return NOTES;
-    }
-
-    return NOTES.filter((note) => {
-      const searchable = `${note.title} ${note.preview}`.toLowerCase();
-      return searchable.includes(normalizedQuery);
-    });
-  }, [query]);
-
-  
-
-  const screenStyle = [styles.safeArea, themedStyles.safeArea];
-
   return (
-    <SafeAreaView style={screenStyle}>
+    <SafeAreaView style={[styles.safeArea, themedStyles.safeArea]}>
       <StatusBar style={resolvedDarkMode ? "light" : "dark"} />
-      <NotesListScreen
+      <NoteEditorScreen
+        body={body}
         darkMode={resolvedDarkMode}
-        filteredNotes={filteredNotes}
         palette={palette}
-        query={query}
-        setDarkMode={handleDarkModeChange}
-        setQuery={setQuery}
+        setDarkMode={setDarkMode}
+        setBody={setBody}
+        setTitle={setTitle}
         themedStyles={themedStyles}
+        title={title}
       />
     </SafeAreaView>
   );
