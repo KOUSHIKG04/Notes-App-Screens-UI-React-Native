@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   View,
@@ -41,27 +42,37 @@ export function NoteEditorScreen({
     >
       {typeof darkMode === "boolean" && setDarkMode ? (
         <View style={styles.topBar}>
-          <Pressable
-            accessibilityLabel={
-              darkMode ? "Switch to light theme" : "Switch to dark theme"
-            }
-            accessibilityRole="button"
-            onPress={() => setDarkMode(!darkMode)}
-            style={({ pressed }) => [
-              styles.themeButton,
-              themedStyles.backButton,
-              {
-                backgroundColor: darkMode ? palette.accentSoft : palette.card,
-              },
-              pressed && styles.pressed,
-            ]}
-          >
-            <Ionicons
-              color={darkMode ? palette.accent : palette.primary}
-              name={darkMode ? "moon" : "sunny"}
-              size={20}
+          <View style={[styles.themeControl, themedStyles.backButton]}>
+            <Pressable
+              accessibilityLabel={
+                darkMode ? "Switch to light theme" : "Switch to dark theme"
+              }
+              accessibilityRole="button"
+              onPress={() => setDarkMode(!darkMode)}
+              style={({ pressed }) => [
+                styles.themeButton,
+                {
+                  backgroundColor: darkMode ? palette.accentSoft : palette.card,
+                },
+                pressed && styles.pressed,
+              ]}
+            >
+              <Ionicons
+                color={darkMode ? palette.accent : palette.primary}
+                name={darkMode ? "moon" : "sunny"}
+                size={18}
+              />
+            </Pressable>
+            <Switch
+              onValueChange={setDarkMode}
+              thumbColor={darkMode ? palette.accent : palette.card}
+              trackColor={{
+                false: palette.mutedStrong,
+                true: palette.accentSoft,
+              }}
+              value={darkMode}
             />
-          </Pressable>
+          </View>
         </View>
       ) : null}
       <ScrollView
@@ -223,10 +234,18 @@ const styles = StyleSheet.create({
   },
   themeButton: {
     alignItems: "center",
-    borderWidth: 1,
-    height: 40,
+    height: 38,
     justifyContent: "center",
-    width: 44,
+    width: 38,
+  },
+  themeControl: {
+    alignItems: "center",
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 6,
+    minHeight: 42,
+    paddingLeft: 4,
+    paddingRight: 8,
   },
   topBar: {
     alignItems: "flex-end",

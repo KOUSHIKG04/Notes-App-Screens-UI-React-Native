@@ -3,6 +3,7 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   View,
@@ -60,27 +61,39 @@ export function NotesListScreen({
                 All notes
               </Text>
             </View>
-            <Pressable
-              accessibilityLabel={
-                darkMode ? "Switch to light theme" : "Switch to dark theme"
-              }
-              accessibilityRole="button"
-              onPress={() => setDarkMode(!darkMode)}
-              style={({ pressed }) => [
-                styles.iconToggle,
-                themedStyles.themeToggle,
-                {
-                  backgroundColor: darkMode ? palette.accentSoft : palette.muted,
-                },
-                pressed && styles.pressed,
-              ]}
-            >
-              <Ionicons
-                color={darkMode ? palette.accent : palette.primary}
-                name={darkMode ? "moon" : "sunny"}
-                size={22}
+            <View style={[styles.themeControl, themedStyles.themeToggle]}>
+              <Pressable
+                accessibilityLabel={
+                  darkMode ? "Switch to light theme" : "Switch to dark theme"
+                }
+                accessibilityRole="button"
+                onPress={() => setDarkMode(!darkMode)}
+                style={({ pressed }) => [
+                  styles.iconToggle,
+                  {
+                    backgroundColor: darkMode
+                      ? palette.accentSoft
+                      : palette.muted,
+                  },
+                  pressed && styles.pressed,
+                ]}
+              >
+                <Ionicons
+                  color={darkMode ? palette.accent : palette.primary}
+                  name={darkMode ? "moon" : "sunny"}
+                  size={20}
+                />
+              </Pressable>
+              <Switch
+                onValueChange={setDarkMode}
+                thumbColor={darkMode ? palette.accent : palette.card}
+                trackColor={{
+                  false: palette.mutedStrong,
+                  true: palette.accentSoft,
+                }}
+                value={darkMode}
               />
-            </Pressable>
+            </View>
           </View>
 
           <TextInput
@@ -156,10 +169,18 @@ const styles = StyleSheet.create({
   },
   iconToggle: {
     alignItems: "center",
-    borderWidth: 1,
-    height: 46,
+    height: 42,
     justifyContent: "center",
-    width: 46,
+    width: 42,
+  },
+  themeControl: {
+    alignItems: "center",
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 6,
+    minHeight: 46,
+    paddingLeft: 4,
+    paddingRight: 8,
   },
   titleRow: {
     alignItems: "center",
