@@ -4,7 +4,8 @@ A React Native notes app built with Expo Router. It includes a notes listing scr
 
 ## Demo Video
 
-Short demo video: Add your demo video link here.
+
+
 
 ## Screens
 
